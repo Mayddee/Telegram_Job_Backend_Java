@@ -32,7 +32,6 @@ JobFind Backend — это серверная часть системы, пос�
 
 ---
 
-## ⚙️ Configuration
 
 ## 🌐 API Base URLs
 Production:
@@ -108,8 +107,6 @@ IntelliJ IDEA / VS Code / Eclipse
 git clone https://github.com/<your-username>/jobfind-backend.git
 cd jobfind-backend
 
-# Настроить application.properties
-# (см. раздел "Configuration")
 
 # Запустить сервер
 mvn spring-boot:run
