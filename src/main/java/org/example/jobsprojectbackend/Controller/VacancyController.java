@@ -20,11 +20,6 @@ public class VacancyController {
         this.companyService = companyService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "✅ Backend is running successfully on Railway!";
-    }
-
 
     @GetMapping
     public ResponseEntity<Page<Vacancy>> getAllVacancies(
