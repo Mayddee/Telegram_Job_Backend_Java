@@ -1,16 +1,17 @@
 package org.example.jobsprojectbackend.Service;
-import org.example.jobsprojectbackend.Entity.Company;
+
 import org.example.jobsprojectbackend.Entity.Vacancy;
-import org.example.jobsprojectbackend.Repository.CompanyRepository;
 import org.example.jobsprojectbackend.Repository.VacancyRepository;
+import org.example.jobsprojectbackend.Repository.CompanyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-
 
 @Service
 public class VacancyService {
+
     private final VacancyRepository vacancyRepo;
     private final CompanyRepository companyRepo;
 
@@ -19,31 +20,34 @@ public class VacancyService {
         this.companyRepo = companyRepo;
     }
 
-    public List<Vacancy> getAll() {
-        return vacancyRepo.findAll();
+    // Получить все вакансии с пагинацией
+    public Page<Vacancy> getAll(int page, int size) {
+        return vacancyRepo.findAll(PageRequest.of(page, size));
     }
 
-    public List<Vacancy> getByCompanyId(Long id) {
-        return vacancyRepo.findByCompany_Id(id);
+    // Получить вакансии конкретной компании
+    public Page<Vacancy> getByCompanyId(Long id, int page, int size) {
+        return vacancyRepo.findByCompany_Id(id, PageRequest.of(page, size));
     }
 
+    // Получить вакансию по ID
     public Optional<Vacancy> getById(Long id) {
         return vacancyRepo.findById(id);
     }
 
-    public List<Vacancy> search(String query) {
+    // Поиск по запросу с пагинацией
+    public Page<Vacancy> search(String query, int page, int size) {
         if (query == null || query.isBlank()) {
-            return getAll();
+            return getAll(page, size);
         }
-        return vacancyRepo.searchAll(query.trim());
+        return vacancyRepo.searchAll(query.trim(), PageRequest.of(page, size));
     }
 
-    public List<Vacancy> filterByLocation(String location) {
+    // Фильтр по локации с пагинацией
+    public Page<Vacancy> filterByLocation(String location, int page, int size) {
         if (location == null || location.isBlank()) {
-            return getAll();
+            return getAll(page, size);
         }
-        return vacancyRepo.findByLocation(location.trim());
+        return vacancyRepo.findByLocation(location.trim(), PageRequest.of(page, size));
     }
-
-
 }

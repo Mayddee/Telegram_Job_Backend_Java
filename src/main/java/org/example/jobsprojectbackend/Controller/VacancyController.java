@@ -1,17 +1,17 @@
 package org.example.jobsprojectbackend.Controller;
-import org.example.jobsprojectbackend.Entity.Company;
+
 import org.example.jobsprojectbackend.Entity.Vacancy;
-import org.example.jobsprojectbackend.Service.CompanyService;
 import org.example.jobsprojectbackend.Service.VacancyService;
+import org.example.jobsprojectbackend.Service.CompanyService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/vacancies")
 @CrossOrigin(origins = "*")
 public class VacancyController {
+
     private final VacancyService vacancyService;
     private final CompanyService companyService;
 
@@ -21,8 +21,11 @@ public class VacancyController {
     }
 
     @GetMapping
-    public List<Vacancy> getAllVacancies() {
-        return vacancyService.getAll();
+    public ResponseEntity<Page<Vacancy>> getAllVacancies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "35") int size
+    ) {
+        return ResponseEntity.ok(vacancyService.getAll(page, size));
     }
 
     @GetMapping("/{id}")
@@ -33,19 +36,29 @@ public class VacancyController {
     }
 
     @GetMapping("/search")
-    public List<Vacancy> search(@RequestParam(required = false) String query) {
-        return vacancyService.search(query);
+    public ResponseEntity<Page<Vacancy>> search(
+            @RequestParam(required = false) String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "35") int size
+    ) {
+        return ResponseEntity.ok(vacancyService.search(query, page, size));
     }
 
     @GetMapping("/filter")
-    public List<Vacancy> filterByLocation(@RequestParam String location) {
-        return vacancyService.filterByLocation(location);
+    public ResponseEntity<Page<Vacancy>> filterByLocation(
+            @RequestParam String location,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "35") int size
+    ) {
+        return ResponseEntity.ok(vacancyService.filterByLocation(location, page, size));
     }
 
     @GetMapping("/company/{companyId}")
-    public List<Vacancy> getVacanciesByCompany(@PathVariable Long companyId) {
-        return vacancyService.getByCompanyId(companyId);
+    public ResponseEntity<Page<Vacancy>> getVacanciesByCompany(
+            @PathVariable Long companyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "35") int size
+    ) {
+        return ResponseEntity.ok(vacancyService.getByCompanyId(companyId, page, size));
     }
-
-
 }
